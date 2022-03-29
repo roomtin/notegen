@@ -4,6 +4,9 @@ use std::fmt::Write;
 
 const VALID_TOKENS: [&str; 4] = ["@", " ", "{", "}"];
 
+const TAG_STRINGS: [(&str, &str); 3] =
+    [("rs", "#Rust"), ("c","#C"), ("java","#Java")];
+
 /**
  * Lexes a source code file and returns a vector of all 
  * the lines containing notegen symbols. Throws an error
@@ -93,9 +96,11 @@ pub fn parse(tokens: Vec<(String, usize)>) -> Result<Vec<(String, usize)>, Error
  * Generate a markdown string from the tokens which will
  * be written to a file later in main.
  */
-pub fn generate(tokens: Vec<(String, usize)>, source_tokens: &Vec<(String, usize)>, ext: String) -> Vec<(String, String)> {
+pub fn generate(tokens: Vec<(String, usize)>, source_tokens: &Vec<(String, usize)>, ext: String, gen_tag: bool) -> Vec<(String, String)> {
     let mut markdown_files = vec!();
+    let mut code_block_title = String::new();
     let mut start_line: usize = 0;
+    let mut printed_tag: bool = false;
     //Generate the markdown file for each defined title
     for token in &tokens {
     //find the title of the markdown file
@@ -106,8 +111,17 @@ pub fn generate(tokens: Vec<(String, usize)>, source_tokens: &Vec<(String, usize
         }
         else if token.0.as_str().starts_with("//@ ") {
             //4 because of the length of the notegen symbol
-            let markdown_string = token.0.clone()[4..].trim_start().to_string();
+            let mut markdown_string = token.0.clone()[4..].trim_start().to_string();
             let len = markdown_files.len();
+            //if generate tags is on and and you haven't written a tag yet, write one
+            if gen_tag & !printed_tag{
+                //find the tuple in TAG_STRINGS that matches the extension
+                let tag_string = TAG_STRINGS.iter().find(|tag| tag.0 == ext).unwrap();
+                markdown_string.push_str(&format!("\n{}\n", tag_string.1));
+                code_block_title = tag_string.1.clone().to_string();
+                printed_tag = true;
+
+            }
             //add the markdown string to the last markdown file
             markdown_files[len -1].1.push_str(&markdown_string);
             //add a new line to keep markdown correct
@@ -125,7 +139,7 @@ pub fn generate(tokens: Vec<(String, usize)>, source_tokens: &Vec<(String, usize
             let len = markdown_files.len();
             let mut markdown_string = String::new();
             //add the code snippet to the last markdown file
-            write!{&mut markdown_string, "\n```{}\n{}```\n", ext, code_snippet}.unwrap();
+            write!{&mut markdown_string, "\n```{}\n{}```\n", &code_block_title.to_lowercase()[1..], code_snippet}.unwrap();
             //add the markdown string to the last markdown file
             markdown_files[len -1].1.push_str(&markdown_string);
         }

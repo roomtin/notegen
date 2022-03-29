@@ -2,7 +2,6 @@ mod generation;
 use clap::Parser;
 use std::io::{prelude::*, BufReader};
 use std::fs::File;
-use std::path::Path;
 use dirs::home_dir;
 use std::process;
 use crate::generation::*;
@@ -20,9 +19,9 @@ struct Args {
     ///Name of source code file
     file: String,
 
-    ///Removes all of the markdown from the source code file upon completion
-    #[clap(short, long)]
-    tidy_mode: bool,
+    //Removes all of the markdown from the source code file upon completion
+   // #[clap(short, long)]
+   // tidy_mode: bool,
 
     ///Puts a "#LanguageName" tag at the end of the file for automatic organization in Obsidian
     #[clap(short, long)]
@@ -34,7 +33,7 @@ struct Args {
 struct Config {
     input_file: String,
     ouput_dir: String,
-    tidy_mode: bool,
+    //tidy_mode: bool,
     generate_tags: bool,
 }
 
@@ -55,24 +54,24 @@ fn get_config_settings() -> Config {
     
     //open a file at ~/.config/notegen/config.txt and read it line by line into the Config struct
     let config_result = File::open(config_str);
-    let mut contfig_vec: Vec<String> = vec!();
+    let mut config_vec: Vec<String> = vec!();
     if let Ok(file) = config_result {
         for line in BufReader::new(file).lines() {
             let line = line.unwrap();
-            contfig_vec.push(line);
+            config_vec.push(line);
         }
         return Config {
             input_file: args.file,
-            ouput_dir: contfig_vec[0].to_string(),
-            tidy_mode: args.tidy_mode,
-            generate_tags: args.generate_tags,
+            ouput_dir: config_vec[0].to_string(),
+            //tidy_mode: args.tidy_mode,
+            generate_tags: config_vec[1].to_string().parse::<bool>().unwrap(),
         };
     }
     else {
         return Config {
             input_file: args.file,
             ouput_dir: "".to_string(),
-            tidy_mode: args.tidy_mode,
+            //tidy_mode: args.tidy_mode,
             generate_tags: args.generate_tags,
         }
     }
@@ -114,20 +113,25 @@ fn main() {
         process::exit(1);
     }
 
-    let generated_files = generate(parsed_tokens.unwrap(), &source_tokens, ext);
+    let generated_files = generate(parsed_tokens.unwrap(), &source_tokens, ext.clone(), config.generate_tags);
+
 
     //write each element of generated files to the output directory
     //if the file path is "" then place in the current directory
     for file in generated_files {
         let mut file_path = config.ouput_dir.clone();
         if file_path.eq("") {
-            println!("EEZ NOTING");
             file_path = ".".to_string();
         }
         file_path.push_str("/");
         file_path.push_str(&file.0);
         file_path.push_str(".md");
-        let mut new_md_file = File::create(file_path).unwrap();
+        let new_md_file = File::create(file_path);
+        if let Err(e) = &new_md_file {
+            println!("\nLooks like that directory doesn't exist: {}", e);
+            process::exit(1);
+        }
+        let mut new_md_file = new_md_file.unwrap();
         new_md_file.write_all(file.1.as_bytes()).unwrap();
     }
 }
