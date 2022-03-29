@@ -1,11 +1,11 @@
 # notegen
 
 ## Description
-When programming, often you encounter a problem which requires you to learn something new in order to solve it. This is great, and provides a way to expand one's knowledgebase, but far too often the steps taken to solve the problem get forgotten. When the problem is encountered again, one will inevitably have go back and search through old source code trying to remember how the problem was solved before, or worse, try and remember the convoluted sequence of stack overflow links visited in order to find the solution. This isn't a great use of time.
+When programming, often you encounter a problem which requires you to learn something new in order to solve it. This is great, and provides a way to expand one's knowledge base, but far too often the steps taken to solve the problem get forgotten. When the problem is encountered again, one will inevitably have go back and search through old source code trying to remember how the problem was solved before, or worse, try and remember the convoluted sequence of stack overflow links visited in order to find the solution. This isn't a great use of time.
 
 One way to remedy this would be to take notes on any new technical knowledge gained while programming, where you leave yourself a short description and a code block to jog your memory, but this too is suboptimal. Stopping the flow of problem solving to open a notes application, copy the code over, and write a description that will likely be nearly identical to your source code comments every time something new is discovered is very tedious and hurts productivity.
 
-So, one real solution is to automate it. Write markdown direcly in your source code file whenever something worth remembering is done, and let a program handle copying it into a new file to be later viewed by the markdown application of your choice. This way all notes of this type can be in once place, and searched for, not spread over several different projects, burried in their source code.
+So, one real solution is to automate it. Write markdown directly in your source code file whenever something worth remembering is done, and let a program handle copying it into a new file to be later viewed by the markdown application of your choice. This way all notes of this type can be in once place, and searched for, not spread over several different projects, buried in their source code.
 
 Currently this program works on Rust, C, and Java files.
 
@@ -53,4 +53,4 @@ Each note must have a title which is specified with `//@@ <Title>`. This becomes
 ### Things that I probably ought to add
 * python support
 * Polish reading in a .config file. Currently is temperamental and not documented.
-* Polish tidy mode. Currently produces a new file without notegen symbols and leaves the original untouched, instead of removing them from the original and producing an unedited backup just incase of errors. This option would be better if it worked more like astyle's \<source\>.orig files.
+* Polish tidy mode. Currently produces a new file without notegen symbols and leaves the original untouched, instead of removing them from the original and producing an unedited backup just in case of errors. This option would be better if it worked more like astyle's \<source\>.orig files.
