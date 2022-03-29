@@ -144,7 +144,7 @@ pub fn generate(tokens: Vec<(String, usize)>, source_tokens: &Vec<(String, usize
             markdown_files[len -1].1.push_str(&markdown_string);
         }
         else {
-            println!("\nThis shouldn't happen. Generator encountered unknown token.")
+            println!("\nThis shouldn't happen. Generator encountered unknown token: {}, {}", token.0, token.1);
         }
     }
     markdown_files

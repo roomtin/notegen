@@ -6,11 +6,6 @@ use dirs::home_dir;
 use std::process;
 use crate::generation::*;
 
-//@@ Using Clap to parse arguments
-//@ # Clap Struct
-//@ Arguments can be parsed using the `clap` crate which allows you
-//@ to define your own argument parsing as follows:
-//@{
 /// A program to automatically generate a markdown file from a source code file
 /// containing embedded markdown notes on the function of the code
 #[derive(Parser, Debug)]
@@ -19,33 +14,28 @@ struct Args {
     ///Name of source code file
     file: String,
 
-    //Removes all of the markdown from the source code file upon completion
-   // #[clap(short, long)]
-   // tidy_mode: bool,
+    ///Creates a copy of the source code with a .tidy extension which contains none of the notegen symbols
+    #[clap(short, long)]
+    tidy_mode: bool,
 
-    ///Puts a "#LanguageName" tag at the end of the file for automatic organization in Obsidian
+    ///Puts a "#LanguageName" tag after the first regular markdown line (which will usually be a header) for automatic organization in Obsidian
     #[clap(short, long)]
     generate_tags: bool,
 
 }
-//@}
 
 struct Config {
     input_file: String,
     ouput_dir: String,
-    //tidy_mode: bool,
+    tidy_mode: bool,
     generate_tags: bool,
 }
 
 /**
  * grabs config from args and config file and returns a Config struct
  */
-//@ Then we can use the `clap` crate's parse function to
-//@ parse the arguments as follows:
-//@{
 fn get_config_settings() -> Config {
     let args = Args::parse();
-//@}
 
     let home = home_dir();
     let config_path = home.unwrap();
@@ -63,7 +53,7 @@ fn get_config_settings() -> Config {
         return Config {
             input_file: args.file,
             ouput_dir: config_vec[0].to_string(),
-            //tidy_mode: args.tidy_mode,
+            tidy_mode: args.tidy_mode,
             generate_tags: config_vec[1].to_string().parse::<bool>().unwrap(),
         };
     }
@@ -71,7 +61,7 @@ fn get_config_settings() -> Config {
         return Config {
             input_file: args.file,
             ouput_dir: "".to_string(),
-            //tidy_mode: args.tidy_mode,
+            tidy_mode: args.tidy_mode,
             generate_tags: args.generate_tags,
         }
     }
@@ -134,4 +124,16 @@ fn main() {
         let mut new_md_file = new_md_file.unwrap();
         new_md_file.write_all(file.1.as_bytes()).unwrap();
     }
+
+    //if tidy mode is enabled, duplicate the source file to a .tidy file and remove all of the lines that contain "//@"
+    if config.tidy_mode {
+        let mut tidy_file = File::create(config.input_file.clone() + ".tidy").unwrap();
+        for line in source_tokens {
+            if !line.0.contains("//@") {
+                tidy_file.write_all(line.0.as_bytes()).unwrap();
+                tidy_file.write_all("\n".as_bytes()).unwrap();
+            }
+        }
+    }
+
 }
