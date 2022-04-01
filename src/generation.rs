@@ -4,8 +4,8 @@ use std::fmt::Write;
 
 const VALID_TOKENS: [&str; 4] = ["@", " ", "{", "}"];
 
-const TAG_STRINGS: [(&str, &str); 3] =
-    [("rs", "#Rust"), ("c","#C"), ("java","#Java")];
+const TAG_STRINGS: [(&str, &str); 4] =
+    [("rs", "#Rust"), ("c","#C"), ("java","#Java") , ("go","#Go")];
 
 /**
  * Lexes a source code file and returns a vector of all 

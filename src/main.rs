@@ -83,7 +83,7 @@ fn main() {
 
     let source_file = source_result.unwrap();
     let mut source_tokens: Vec<(String, usize)> = Vec::new(); 
-    let reader = BufReader::new(source_file);
+    let reader = BufReader::new(&source_file);
 
     //push all the lines of the file into a source_tokens vector using their line number as the usize
     for (line_number, line) in reader.lines().enumerate() {
@@ -127,13 +127,21 @@ fn main() {
 
     //if tidy mode is enabled, duplicate the source file to a .tidy file and remove all of the lines that contain "//@"
     if config.tidy_mode {
-        let mut tidy_file = File::create(config.input_file.clone() + ".tidy").unwrap();
+        let mut tidy_file = File::create(config.input_file.clone() + ".orig").unwrap();
+        //delete the original file
+        std::fs::remove_file(config.input_file.clone()).unwrap();
+        //open a new file with the original file name
+        let mut source_file = File::create(config.input_file.clone()).unwrap();
         for line in source_tokens {
             if !line.0.contains("//@") {
-                tidy_file.write_all(line.0.as_bytes()).unwrap();
-                tidy_file.write_all("\n".as_bytes()).unwrap();
+                source_file.write_all(line.0.as_bytes()).unwrap();
+                source_file.write_all("\n".as_bytes()).unwrap();
             }
+            tidy_file.write_all(line.0.as_bytes()).unwrap();
+            tidy_file.write_all("\n".as_bytes()).unwrap();
         }
     }
+
+    println!("\nDone!");
 
 }
