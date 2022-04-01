@@ -7,7 +7,7 @@ One way to remedy this would be to take notes on any new technical knowledge gai
 
 So, one real solution is to automate it. Write markdown directly in your source code file whenever something worth remembering is done, and let a program handle copying it into a new file to be later viewed by the markdown application of your choice. This way all notes of this type can be in once place, and searched for, not spread over several different projects, buried in their source code.
 
-Currently this program works on Rust, C, and Java files.
+Currently this program works on Rust, C, Java, and Go files.
 
 ## Usage
 ```
