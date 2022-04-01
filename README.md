@@ -28,7 +28,9 @@ OPTIONS:
 
 
 ## Building
-Run the following commands to build from source:
+A binary can be found for Linux and Windows <a href="https://github.com/roomtin/notegen/releases/tag/v0.9.2-alpha">here</a>.
+
+If building from source is preferable, run these commands:
 * `git clone https://github.com/roomtin/notegen.git`
 * `cd notegen`
 * `cargo build --release`
@@ -53,4 +55,4 @@ Each note must have a title which is specified with `//@@ <Title>`. This becomes
 ### Things that I probably ought to add
 * python support
 * Polish reading in a .config file. Currently is temperamental and not documented.
-* Polish tidy mode. Currently produces a new file without notegen symbols and leaves the original untouched, instead of removing them from the original and producing an unedited backup just in case of errors. This option would be better if it worked more like astyle's \<source\>.orig files.
+* ~~Polish tidy mode.~~ 
