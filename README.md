@@ -46,6 +46,8 @@ Requires that the rust compiler and cargo are installed.
 
 Each note must have a title which is specified with `//@@ <Title>`. This becomes the filename for the new markdown file. Within the source code, use `//@ ` followed by any markdown, and `//@{`,`//@}` to mark a chunk of source code to export as an example into the new markdown file.
 
+It is possible to define multiple markdown files in a single source code file. Each `//@@` tag will create a separate markdown file.
+
 ## Source Code Example
 <img src="https://user-images.githubusercontent.com/61144046/160654104-19f9e728-124b-450e-96ca-91abf936cdfc.png" alt="Source Image" width="550"/>
 
