@@ -108,6 +108,7 @@ pub fn generate(tokens: Vec<(String, usize)>, source_tokens: &Vec<(String, usize
             //4 because of the length of the notegen symbol
             let title_string = token.0.clone()[4..].trim_start().to_string();
             markdown_files.push((title_string, "".to_string()));
+            printed_tag = false;
         }
         else if token.0.as_str().starts_with("//@ ") {
             //4 because of the length of the notegen symbol
