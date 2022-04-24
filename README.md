@@ -28,7 +28,7 @@ OPTIONS:
 
 
 ## Building
-A binary can be found for Linux and Windows <a href="https://github.com/roomtin/notegen/releases/tag/v0.9.2-alpha">here</a>.
+A binary can be found for Linux and Windows <a href="https://github.com/roomtin/notegen/releases/tag/v0.9.4-alpha">here</a>.
 
 If building from source is preferable, run these commands:
 * `git clone https://github.com/roomtin/notegen.git`
